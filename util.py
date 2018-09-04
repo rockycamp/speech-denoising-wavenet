@@ -15,17 +15,17 @@ def l1_l2_loss(y_true, y_pred, l1_weight, l2_weight):
     loss = 0
 
     if l1_weight != 0:
-        loss += l1_weight*keras.objectives.mean_absolute_error(y_true, y_pred)
+        loss += l1_weight*keras.losses.mean_absolute_error(y_true, y_pred)
 
     if l2_weight != 0:
-        loss += l2_weight * keras.objectives.mean_squared_error(y_true, y_pred)
+        loss += l2_weight * keras.losses.mean_squared_error(y_true, y_pred)
 
     return loss
 
 
 def compute_receptive_field_length(stacks, dilations, filter_length, target_field_length):
 
-    half_filter_length = (filter_length-1)/2
+    half_filter_length = (filter_length-1)//2
     length = 0
     for d in dilations:
         length += d*half_filter_length
@@ -156,7 +156,7 @@ def get_subdict_from_dict(keys, dictionary):
 def pretty_json_dump(values, file_path=None):
 
     if file_path is None:
-        print json.dumps(values, sort_keys=True, indent=4, separators=(',', ': '))
+        print(json.dumps(values, sort_keys=True, indent=4, separators=(',', ': ')))
     else:
         json.dump(values, open(file_path, 'w'), sort_keys=True, indent=4, separators=(',', ': '))
 

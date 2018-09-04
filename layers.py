@@ -8,17 +8,26 @@ class AddSingletonDepth(keras.layers.Layer):
 
     def call(self, x, mask=None):
         x = keras.backend.expand_dims(x, -1)  # add a dimension of the right
-
+        #print('x shape: ',keras.backend.int_shape(x))
+        #print('ndim(x): ',keras.backend.ndim(x))
         if keras.backend.ndim(x) == 4:
             return keras.backend.permute_dimensions(x, (0, 3, 1, 2))
         else:
             return x
 
-    def get_output_shape_for(self, input_shape):
+    def compute_output_shape(self, input_shape):
         if len(input_shape) == 3:
             return input_shape[0], 1, input_shape[1], input_shape[2]
         else:
             return input_shape[0], input_shape[1], 1
+
+        #return (input_shape[0], self.output_dim)
+
+    #def get_output_shape_for(self, input_shape):
+    #    if len(input_shape) == 3:
+    #        return input_shape[0], 1, input_shape[1], input_shape[2]
+    #    else:
+    #        return input_shape[0], input_shape[1], 1
 
 
 class Subtract(keras.layers.Layer):
@@ -29,7 +38,8 @@ class Subtract(keras.layers.Layer):
     def call(self, x, mask=None):
         return x[0] - x[1]
 
-    def get_output_shape_for(self, input_shape):
+    #def get_output_shape_for(self, input_shape):
+    def compute_output_shape(self, input_shape):
         return input_shape[0]
 
 
@@ -55,8 +65,8 @@ class Slice(keras.layers.Layer):
         return y
 
 
-    def get_output_shape_for(self, input_shape):
-
+    #def get_output_shape_for(self, input_shape):
+    def compute_output_shape(self, input_shape):
         output_shape = (None,)
         for i, dim_length in enumerate(self.desired_output_shape):
             if dim_length == Ellipsis:
