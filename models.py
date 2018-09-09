@@ -152,13 +152,13 @@ class DenoisingWavenet():
             keras.callbacks.CSVLogger(os.path.join(self.config['training']['path'], self.history_filename), append=True)
         ]
 
-    def fit_model(self, train_set_generator, num_train_samples, test_set_generator, num_test_samples, num_epochs):
+    def fit_model(self, train_set_generator, steps_per_epoch, test_set_generator, validation_steps, num_epochs):
         print('Fitting model with ',num_train_samples,' training samples and ',num_test_samples,' test samples...')
-        self.model.fit_generator(train_set_generator,
-                                 num_train_samples,
-                                 nb_epoch=num_epochs,
+        self.model.fit_generator(generator=train_set_generator,
+                                 steps_per_epoch=steps_per_epoch,
+                                 epochs=num_epochs,
                                  validation_data=test_set_generator,
-                                 nb_val_samples=num_test_samples,
+                                 validation_steps=validation_steps,
                                  callbacks=self.get_callbacks(),
                                  verbose=self.verbosity,
                                  initial_epoch=self.epoch_num)

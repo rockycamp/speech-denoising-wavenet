@@ -21,11 +21,15 @@ def denoise_sample(model, input, condition_input, batch_size, output_filename_pr
     noise_output = []
     num_pad_values = 0
     fragment_i = 0
+    
+    # tqdm is a type of progress bar
     for batch_i in tqdm.tqdm(range(0, num_batches)):
 
+        # account for possiblty small batch in last iteration
         if batch_i == num_batches-1: #If its the last batch'
             batch_size = num_fragments - batch_i*batch_size
 
+        # condition inputs art per speaker conditioning
         condition_batch = np.array([condition_input, ] * batch_size, dtype='uint8')
         input_batch = np.zeros((batch_size, model.input_length))
 
@@ -49,11 +53,13 @@ def denoise_sample(model, input, condition_input, batch_size, output_filename_pr
             noise_output_fragment = denoised_output_fragments[1]
             denoised_output_fragment = denoised_output_fragments[0]
 
-        denoised_output_fragment = denoised_output_fragment[:, model.target_padding: model.target_padding + model.target_field_length]
+        denoised_output_fragment = denoised_output_fragment[:, model.target_padding: model.target_padding + 
+                                                            model.target_field_length]
         denoised_output_fragment = denoised_output_fragment.flatten().tolist()
 
         if noise_output_fragment is not None:
-            noise_output_fragment = noise_output_fragment[:, model.target_padding: model.target_padding + model.target_field_length]
+            noise_output_fragment = noise_output_fragment[:, model.target_padding: model.target_padding + 
+                                                          model.target_field_length]
             noise_output_fragment = noise_output_fragment.flatten().tolist()
 
         if type(denoised_output_fragments) is float:

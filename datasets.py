@@ -34,7 +34,7 @@ class NSDTSEADataset():
         for set in ['train', 'test']:
             for condition in ['clean', 'noisy']:
                 current_directory = os.path.join(self.path, condition+'_'+set+'set_wav')
-
+                #current_directory = os.path.join(self.path, condition+'_'+set+'set_28spk_wav')
                 sequences, file_paths, speakers, speech_onset_offset_indices, regain_factors = \
                     self.load_directory(current_directory, condition)
 
